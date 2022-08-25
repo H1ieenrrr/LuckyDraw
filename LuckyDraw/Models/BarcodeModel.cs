@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LuckyDraw.Models
 {
+    [Table("Barcode")]
     public class BarcodeModel
     {
         [Key]

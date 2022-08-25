@@ -32,14 +32,15 @@ namespace LuckyDraw.Models
         [Display(Name = "Active")]
         public bool GiftActive { get; set; }
 
-        [ForeignKey("ruleModel")]
-        public int GiftRule { get; set; }
-
         [Display(Name = "Used")]
         public int GiftUsed { get; set; }
-        
-        public bool IsDelete { get; set; }
 
-        public RuleModel ruleModel { get; set; }
+        [ForeignKey("CustomerModel")]
+        public int GiftCustommer { get; set; }
+        public bool IsDelete { get; set; }
+        
+        public CustomerModel CustomerModel { get; set; }
+        public  RuleModel ruleModel { get; set; }
+        public virtual CampaignModel campaignModel { get; set; }
     }
 }

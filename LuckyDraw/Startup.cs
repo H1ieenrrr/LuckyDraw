@@ -1,4 +1,8 @@
+using LuckyDraw.Helpers;
+using LuckyDraw.Interfaces;
 using LuckyDraw.Models;
+using LuckyDraw.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,9 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LuckyDraw
@@ -29,6 +35,26 @@ namespace LuckyDraw
             services.AddDbContext<DataContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddTransient<ICustomer, CustomerSvc>();
+            services.AddTransient<IEncode, EncodeHelper>();
+            services.AddTransient<IGift, GiftSvc>();
+            services.AddTransient<ICampaign, CampaignSvc>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(options =>
+               {
+                   options.RequireHttpsMetadata = false;
+                   options.SaveToken = true;
+                   options.RequireHttpsMetadata = false;
+                   options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                   {
+                       ValidateIssuer = true,
+                       ValidateAudience = true,
+                       ValidAudience = Configuration["Jwt:Audience"],
+                       ValidIssuer = Configuration["Jwt:Issuer"],
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                   };
+               });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +75,7 @@ namespace LuckyDraw
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

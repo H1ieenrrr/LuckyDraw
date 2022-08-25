@@ -10,11 +10,20 @@ namespace LuckyDraw.Models
         [Key]
         public int CampaignId { get; set; }
 
-        [ForeignKey("bulkModel")]
-        public int CampaignBulk { get; set; }
+        [Required(ErrorMessage = "Nhập Program Name"), Display(Name = "Program Name")]
+        [StringLength(50)]
+        public string CampaignProgramName { get; set; }
 
-        [ForeignKey("standaloneModel")]
-        public int CampaignStandalone { get; set; }
+        [Required(ErrorMessage = "Nhập code count"), Display(Name = "Code Count")]
+        public int CampaignCount { get; set; }
+
+        [Display(Name = "Auto Update")]
+        public bool CampaignAutoUpdate { get; set; }
+        public bool CampaignOnly { get; set; }
+
+        [Display(Name = "Campaing name")]
+        public string CampaignName { get; set; }
+        public bool CampaignApplyAll { get; set; }
 
         [Display(Name = "Description")]
         [StringLength(200)]
@@ -55,17 +64,11 @@ namespace LuckyDraw.Models
         [ForeignKey("giftModel")]
         public int CampaignGift { get; set; }
 
-        [ForeignKey("userModel")]
-        public int CampaignOwner { get; set; }
 
         [ForeignKey("barcodeModel")]
         public int CampaignBarcode { get; set; }
 
-        
-        public UserModel userModel { get; set; }
-        public BulkModel bulkModel { get; set; }
-        public StandaloneModel standaloneModel { get; set; }
-        public GiftModel giftModel { get; set; }
+        public virtual GiftModel giftModel { get; set; }
         public BarcodeModel barcodeModel { get; set; }
 
 

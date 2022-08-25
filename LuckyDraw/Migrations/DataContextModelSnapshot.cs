@@ -57,33 +57,7 @@ namespace LuckyDraw.Migrations
 
                     b.HasKey("BarcodeId");
 
-                    b.ToTable("BarcodeModels");
-                });
-
-            modelBuilder.Entity("LuckyDraw.Models.BulkModel", b =>
-                {
-                    b.Property<int>("BulkId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("BulkAutoUpdate")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("BulkCount")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("BulkOnly")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("BulkProgramName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("BulkId");
-
-                    b.ToTable("Bulk");
+                    b.ToTable("Barcode");
                 });
 
             modelBuilder.Entity("LuckyDraw.Models.CampaignModel", b =>
@@ -93,15 +67,21 @@ namespace LuckyDraw.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CampaignBarcode")
-                        .HasColumnType("int");
+                    b.Property<bool>("CampaignApplyAll")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("CampaignBulk")
+                    b.Property<bool>("CampaignAutoUpdate")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("CampaignBarcode")
                         .HasColumnType("int");
 
                     b.Property<string>("CampaignCharset")
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
+
+                    b.Property<int>("CampaignCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("CampaignDescription")
                         .HasMaxLength(200)
@@ -116,12 +96,15 @@ namespace LuckyDraw.Migrations
                     b.Property<int>("CampaignLength")
                         .HasColumnType("int");
 
+                    b.Property<string>("CampaignName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CampaignNote")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("CampaignOwner")
-                        .HasColumnType("int");
+                    b.Property<bool>("CampaignOnly")
+                        .HasColumnType("bit");
 
                     b.Property<string>("CampaignPostfix")
                         .HasMaxLength(50)
@@ -131,8 +114,10 @@ namespace LuckyDraw.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
 
-                    b.Property<int>("CampaignStandalone")
-                        .HasColumnType("int");
+                    b.Property<string>("CampaignProgramName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("CampaignStarDate")
                         .HasColumnType("datetime2");
@@ -147,13 +132,8 @@ namespace LuckyDraw.Migrations
 
                     b.HasIndex("CampaignBarcode");
 
-                    b.HasIndex("CampaignBulk");
-
-                    b.HasIndex("CampaignGift");
-
-                    b.HasIndex("CampaignOwner");
-
-                    b.HasIndex("CampaignStandalone");
+                    b.HasIndex("CampaignGift")
+                        .IsUnique();
 
                     b.ToTable("Campaigns");
                 });
@@ -166,7 +146,6 @@ namespace LuckyDraw.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CustomerAddress")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -176,16 +155,10 @@ namespace LuckyDraw.Migrations
                     b.Property<bool>("CustomerBlock")
                         .HasColumnType("bit");
 
-                    b.Property<string>("CustomerCofirmPassword")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int>("CustomerGiftCode")
-                        .HasColumnType("int");
+                    b.Property<string>("CustomerEmail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CustomerName")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -203,22 +176,19 @@ namespace LuckyDraw.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<bool>("CustomerSentGift")
-                        .HasColumnType("bit");
-
                     b.Property<string>("CustomerTypeBusinees")
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<DateTime>("CustomerWinDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
                     b.HasKey("CustomerID");
 
-                    b.HasIndex("CustomerGiftCode");
+                    b.HasIndex("Role");
 
                     b.ToTable("Customers");
                 });
@@ -244,6 +214,9 @@ namespace LuckyDraw.Migrations
                     b.Property<DateTime>("GiftCreateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("GiftCustommer")
+                        .HasColumnType("int");
+
                     b.Property<string>("GiftDescription")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -251,9 +224,6 @@ namespace LuckyDraw.Migrations
                     b.Property<string>("GiftProductName")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("GiftRule")
-                        .HasColumnType("int");
 
                     b.Property<int>("GiftUsed")
                         .HasColumnType("int");
@@ -263,7 +233,7 @@ namespace LuckyDraw.Migrations
 
                     b.HasKey("GiftId");
 
-                    b.HasIndex("GiftRule");
+                    b.HasIndex("GiftCustommer");
 
                     b.ToTable("Gifts");
                 });
@@ -287,9 +257,7 @@ namespace LuckyDraw.Migrations
             modelBuilder.Entity("LuckyDraw.Models.RuleModel", b =>
                 {
                     b.Property<int>("RuleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int>("RuleAmount")
                         .HasColumnType("int");
@@ -333,71 +301,27 @@ namespace LuckyDraw.Migrations
                     b.ToTable("Rules");
                 });
 
-            modelBuilder.Entity("LuckyDraw.Models.StandaloneModel", b =>
+            modelBuilder.Entity("LuckyDraw.Models.WinnerModel", b =>
                 {
-                    b.Property<int>("StandaloneId")
+                    b.Property<int>("WinnerCustommerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("StandaloneApplyAll")
-                        .HasColumnType("bit");
+                    b.Property<DateTime>("WinnerDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("StandaloneCampaignName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("StandaloneId");
-
-                    b.ToTable("Standalone");
-                });
-
-            modelBuilder.Entity("LuckyDraw.Models.UserModel", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserAddress")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("UserCofirmPassword")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("UserPassword")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("UserPhone")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<int>("UserRole")
+                    b.Property<int>("WinnerGift")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId");
+                    b.Property<bool>("WinnerStatus")
+                        .HasColumnType("bit");
 
-                    b.HasIndex("UserRole");
+                    b.HasKey("WinnerCustommerId");
 
-                    b.ToTable("Users");
+                    b.HasIndex("WinnerGift");
+
+                    b.ToTable("Winner");
                 });
 
             modelBuilder.Entity("LuckyDraw.Models.CampaignModel", b =>
@@ -408,72 +332,66 @@ namespace LuckyDraw.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LuckyDraw.Models.BulkModel", "bulkModel")
-                        .WithMany()
-                        .HasForeignKey("CampaignBulk")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("LuckyDraw.Models.GiftModel", "giftModel")
-                        .WithMany()
-                        .HasForeignKey("CampaignGift")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LuckyDraw.Models.UserModel", "userModel")
-                        .WithMany()
-                        .HasForeignKey("CampaignOwner")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LuckyDraw.Models.StandaloneModel", "standaloneModel")
-                        .WithMany()
-                        .HasForeignKey("CampaignStandalone")
+                        .WithOne("campaignModel")
+                        .HasForeignKey("LuckyDraw.Models.CampaignModel", "CampaignGift")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("barcodeModel");
 
-                    b.Navigation("bulkModel");
-
                     b.Navigation("giftModel");
-
-                    b.Navigation("standaloneModel");
-
-                    b.Navigation("userModel");
                 });
 
             modelBuilder.Entity("LuckyDraw.Models.CustomerModel", b =>
                 {
-                    b.HasOne("LuckyDraw.Models.GiftModel", "giftModel")
+                    b.HasOne("LuckyDraw.Models.RoleModel", "roleModel")
                         .WithMany()
-                        .HasForeignKey("CustomerGiftCode")
+                        .HasForeignKey("Role")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("roleModel");
+                });
+
+            modelBuilder.Entity("LuckyDraw.Models.GiftModel", b =>
+                {
+                    b.HasOne("LuckyDraw.Models.CustomerModel", "CustomerModel")
+                        .WithMany()
+                        .HasForeignKey("GiftCustommer")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CustomerModel");
+                });
+
+            modelBuilder.Entity("LuckyDraw.Models.RuleModel", b =>
+                {
+                    b.HasOne("LuckyDraw.Models.GiftModel", "giftModel")
+                        .WithOne("ruleModel")
+                        .HasForeignKey("LuckyDraw.Models.RuleModel", "RuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("giftModel");
                 });
 
-            modelBuilder.Entity("LuckyDraw.Models.GiftModel", b =>
+            modelBuilder.Entity("LuckyDraw.Models.WinnerModel", b =>
                 {
-                    b.HasOne("LuckyDraw.Models.RuleModel", "ruleModel")
+                    b.HasOne("LuckyDraw.Models.GiftModel", "gift")
                         .WithMany()
-                        .HasForeignKey("GiftRule")
+                        .HasForeignKey("WinnerGift")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ruleModel");
+                    b.Navigation("gift");
                 });
 
-            modelBuilder.Entity("LuckyDraw.Models.UserModel", b =>
+            modelBuilder.Entity("LuckyDraw.Models.GiftModel", b =>
                 {
-                    b.HasOne("LuckyDraw.Models.RoleModel", "roleModel")
-                        .WithMany()
-                        .HasForeignKey("UserRole")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("campaignModel");
 
-                    b.Navigation("roleModel");
+                    b.Navigation("ruleModel");
                 });
 #pragma warning restore 612, 618
         }

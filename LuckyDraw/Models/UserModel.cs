@@ -40,6 +40,7 @@ namespace LuckyDraw.Models
         [Column(TypeName = "varchar(50)"), MaxLength(50)]
         [DataType(DataType.Password)]
         [Compare("UserPassword", ErrorMessage = "Mật khẩu không khớp")]
+        [NotMapped]
         public string UserCofirmPassword { get; set; }
 
         public bool IsDelete { get; set; }

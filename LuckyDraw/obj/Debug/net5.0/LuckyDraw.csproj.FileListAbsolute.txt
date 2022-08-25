@@ -69,3 +69,5 @@ C:\Users\Tan Hien\OneDrive\Documents\Intern\AltaSoftware\BaiTap\Project02\Projec
 C:\Users\Tan Hien\OneDrive\Documents\Intern\AltaSoftware\BaiTap\Project02\Project02\LuckyDraw\LuckyDraw\obj\Debug\net5.0\LuckyDraw.pdb
 C:\Users\Tan Hien\OneDrive\Documents\Intern\AltaSoftware\BaiTap\Project02\Project02\LuckyDraw\LuckyDraw\obj\Debug\net5.0\LuckyDraw.genruntimeconfig.cache
 C:\Users\Tan Hien\OneDrive\Documents\Intern\AltaSoftware\BaiTap\Project02\Project02\LuckyDraw\LuckyDraw\obj\Debug\net5.0\ref\LuckyDraw.dll
+C:\Users\Tan Hien\OneDrive\Documents\Intern\AltaSoftware\BaiTap\Project02\Project02\LuckyDraw\LuckyDraw\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Tan Hien\OneDrive\Documents\Intern\AltaSoftware\BaiTap\Project02\Project02\LuckyDraw\LuckyDraw\bin\Debug\net5.0\Microsoft.IdentityModel.Abstractions.dll

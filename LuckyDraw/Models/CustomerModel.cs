@@ -10,9 +10,14 @@ namespace LuckyDraw.Models
         [Key]
         public int CustomerID { get; set; }
 
-        [Required(ErrorMessage = "Nhập họ tên"), Display(Name = "Name")]
+        [Display(Name = "Name")]
         [StringLength(50)]
         public string CustomerName { get; set; }
+
+        [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
+        //[RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}", ErrorMessage = "Email Không Hợp Lệ")]
+        public string CustomerEmail { get; set; }
 
         [Required(ErrorMessage = "Nhập Số Điện Thoại")]
         [Column(TypeName = "varchar(15)"), MaxLength(15)]
@@ -20,7 +25,7 @@ namespace LuckyDraw.Models
         [RegularExpression(@"^\(?([0-9]{3})[-. ]?([0-9]{4})[-. ]?([0-9]{3})$", ErrorMessage = "Số Điện Thoại Không Hợp Lệ")]
         public string CustomerPhone { get; set; }
 
-        [Required(ErrorMessage = "Nhập Địa Chỉ"), Display(Name = "Địa Chỉ")]
+        [Display(Name = "Địa Chỉ")]
         [StringLength(200)]
         public string CustomerAddress { get; set; }
 
@@ -36,15 +41,12 @@ namespace LuckyDraw.Models
         [StringLength(30)]
         public string CustomerTypeBusinees { get; set; }
 
-        [Display(Name = "Win Date")]
-        [DataType(DataType.Date)]
-        public DateTime CustomerWinDate { get; set; }
 
         [Display(Name = "Block")]
         public bool CustomerBlock { get; set; }
 
-        [Display(Name = "Sent Gift")]
-        public bool CustomerSentGift { get; set; }
+        [ForeignKey("roleModel")]
+        public int Role { get; set; }
 
         [Required(ErrorMessage = "Nhập Mật Khẩu"), Display(Name = "Mật Khẩu")]
         [Column(TypeName = "varchar(50)"), MaxLength(50)]
@@ -54,14 +56,14 @@ namespace LuckyDraw.Models
         [Required(ErrorMessage = "Nhập Lại Mật Khẩu"), Display(Name = "Nhập Lại Mật Khẩu")]
         [Column(TypeName = "varchar(50)"), MaxLength(50)]
         [DataType(DataType.Password)]
-        [Compare("UserPassword", ErrorMessage = "Mật khẩu không khớp")]
+        [Compare("CustomerPassword", ErrorMessage = "Mật khẩu không khớp")]
+        [NotMapped]
         public string CustomerCofirmPassword { get; set; }
 
-        [ForeignKey("giftModel")]
-        public int CustomerGiftCode { get; set; }
+       
         public bool IsDelete { get; set; }
 
-        public GiftModel giftModel { get; set; }
-
+   
+         public RoleModel roleModel { get; set; }
     }
 }

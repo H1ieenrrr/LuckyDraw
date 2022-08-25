@@ -50,5 +50,7 @@ namespace LuckyDraw.Models
         [Display(Name = "End date")]
         [DataType(DataType.Date)]
         public DateTime RuleEndDay { get; set; }
+
+        public  GiftModel giftModel { get; set; }
     }
 }
