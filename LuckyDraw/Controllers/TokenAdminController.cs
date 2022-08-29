@@ -16,11 +16,11 @@ namespace LuckyDraw.Controllers
     [ApiController]
     public class TokenAdminController : ControllerBase
     {
-        public ICustomer _customerSvc;
+        public IAdmin _adminSvc;
         public IConfiguration _configuration;
-        public TokenAdminController(ICustomer customerSvc, IConfiguration configuration)
+        public TokenAdminController(IAdmin adminSvc, IConfiguration configuration)
         {
-            _customerSvc = customerSvc;
+            _adminSvc = adminSvc;
             _configuration = configuration;
         }
 
@@ -29,7 +29,7 @@ namespace LuckyDraw.Controllers
         {
             if (viewLogin != null && !string.IsNullOrEmpty(viewLogin.Email) && !string.IsNullOrEmpty(viewLogin.PassWord))
             {
-                var customer = _customerSvc.LoginAdmin(viewLogin);
+                var customer = _adminSvc.LoginAdmin(viewLogin);
 
                 if (customer != null)
                 {

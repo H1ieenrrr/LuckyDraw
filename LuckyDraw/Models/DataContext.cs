@@ -10,10 +10,10 @@ namespace LuckyDraw.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GiftModel>()
-                .HasOne(a => a.ruleModel)
-                .WithOne(a => a.giftModel)
-                .HasForeignKey<RuleModel>(c => c.RuleId);
+            //modelBuilder.Entity<GiftModel>()
+            //    .HasOne(a => a.ruleModel)
+            //    .WithOne(a => a.giftModel)
+            //    .HasForeignKey<RuleModel>(c => c.Id);
         }
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -28,5 +28,7 @@ namespace LuckyDraw.Models
         public DbSet<CustomerModel> CustomerModels { get; set; }
         public DbSet<WinnerModel> WinnerModels { get; set; }
         public DbSet<BarcodeModel> BarcodeModels { get; set; }
+
+        public DbSet<BarcodeHistory> BarcodeHistory { get; set; }
     }
 }

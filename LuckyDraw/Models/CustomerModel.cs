@@ -19,7 +19,7 @@ namespace LuckyDraw.Models
         //[RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}", ErrorMessage = "Email Không Hợp Lệ")]
         public string CustomerEmail { get; set; }
 
-        [Required(ErrorMessage = "Nhập Số Điện Thoại")]
+        //[Required(ErrorMessage = "Nhập Số Điện Thoại")]
         [Column(TypeName = "varchar(15)"), MaxLength(15)]
         [DataType(DataType.PhoneNumber)]
         [RegularExpression(@"^\(?([0-9]{3})[-. ]?([0-9]{4})[-. ]?([0-9]{3})$", ErrorMessage = "Số Điện Thoại Không Hợp Lệ")]
@@ -45,15 +45,17 @@ namespace LuckyDraw.Models
         [Display(Name = "Block")]
         public bool CustomerBlock { get; set; }
 
+        public int CustomerSpin { get; set; }
+
         [ForeignKey("roleModel")]
         public int Role { get; set; }
 
-        [Required(ErrorMessage = "Nhập Mật Khẩu"), Display(Name = "Mật Khẩu")]
+        //[Required(ErrorMessage = "Nhập Mật Khẩu"), Display(Name = "Mật Khẩu")]
         [Column(TypeName = "varchar(50)"), MaxLength(50)]
         [DataType(DataType.Password)]
         public string CustomerPassword { get; set; }
 
-        [Required(ErrorMessage = "Nhập Lại Mật Khẩu"), Display(Name = "Nhập Lại Mật Khẩu")]
+        //[Required(ErrorMessage = "Nhập Lại Mật Khẩu"), Display(Name = "Nhập Lại Mật Khẩu")]
         [Column(TypeName = "varchar(50)"), MaxLength(50)]
         [DataType(DataType.Password)]
         [Compare("CustomerPassword", ErrorMessage = "Mật khẩu không khớp")]

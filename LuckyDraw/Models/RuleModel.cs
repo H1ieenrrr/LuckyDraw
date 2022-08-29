@@ -14,7 +14,7 @@ namespace LuckyDraw.Models
         [StringLength(50)]
         public string RuleName { get; set; }
 
-        [Required(ErrorMessage = "Chọn Gift"), Display(Name = "Select Gift")]
+        //[Required(ErrorMessage = "Chọn Gift"), Display(Name = "Select Gift")]
         [StringLength(50)]
         public string RuleSelectGift { get; set; }
 
@@ -30,7 +30,7 @@ namespace LuckyDraw.Models
         public DateTime RuleEndTime { get; set; }
 
         [Display(Name = "All Day")]
-        public bool RullAllDay { get; set; }
+        public bool RuleAllDay { get; set; }
 
         [Display(Name = "Probability")]
         public int RuleProbability { get; set; }
@@ -51,6 +51,9 @@ namespace LuckyDraw.Models
         [DataType(DataType.Date)]
         public DateTime RuleEndDay { get; set; }
 
-        public  GiftModel giftModel { get; set; }
+        [ForeignKey("giftModel")]
+        public int RuleGiftId { get; set; }
+
+        public virtual  GiftModel giftModel { get; set; }
     }
 }

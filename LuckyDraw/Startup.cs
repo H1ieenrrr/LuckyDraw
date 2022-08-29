@@ -37,8 +37,8 @@ namespace LuckyDraw
 
             services.AddTransient<ICustomer, CustomerSvc>();
             services.AddTransient<IEncode, EncodeHelper>();
-            services.AddTransient<IGift, GiftSvc>();
-            services.AddTransient<ICampaign, CampaignSvc>();
+            services.AddTransient<IAdmin, AdminSvc>();
+            
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddJwtBearer(options =>

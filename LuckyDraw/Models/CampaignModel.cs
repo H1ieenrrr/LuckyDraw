@@ -61,15 +61,11 @@ namespace LuckyDraw.Models
         [StringLength(100)]
         public string CampaignNote { get; set; }
 
-        [ForeignKey("giftModel")]
-        public int CampaignGift { get; set; }
+        
 
-
-        [ForeignKey("barcodeModel")]
-        public int CampaignBarcode { get; set; }
 
         public virtual GiftModel giftModel { get; set; }
-        public BarcodeModel barcodeModel { get; set; }
+        
 
 
     }
