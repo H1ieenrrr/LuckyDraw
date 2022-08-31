@@ -56,10 +56,18 @@ namespace LuckyDraw.Services
             return ret;
         }
 
+        public async Task<List<CustomerModel>> GetCustomerAll()
+        {
+            List<CustomerModel> customer = new List<CustomerModel>();
+            customer = await _context.CustomerModels.ToListAsync();
+            return customer;
+        } 
+
         public async Task<List<CampaignModel>> GetAllCampaign()
         {
             List<CampaignModel> list = new List<CampaignModel>();
-            list = await _context.CampaignModels.ToListAsync();
+            list = await _context.CampaignModels.Include(o=>o.giftModel).Include(o=>o.barcodeModels).
+                ToListAsync();
             return list;
         }
 
@@ -68,7 +76,7 @@ namespace LuckyDraw.Services
             int ret = 0;
             try
             {
-
+               
                 _context.Add(campaignModel);
                 await _context.SaveChangesAsync();
                 ret = campaignModel.CampaignId;
@@ -85,6 +93,20 @@ namespace LuckyDraw.Services
             List<RuleModel> list = new List<RuleModel>();
             list = await _context.RuleModels.ToListAsync();
             return list;
+        }
+
+        public RuleModel GetRuleIdFind(int id)
+        {
+            RuleModel ruleModel = null;
+            ruleModel = _context.RuleModels.Find(id);
+            return ruleModel;
+        }
+
+        public async Task<RuleModel> GetRuleId(int id)
+        {
+            RuleModel ruleModel = null;
+            ruleModel = await _context.RuleModels.FirstOrDefaultAsync(m => m.RuleId == id);
+            return ruleModel;
         }
 
         public async Task<int> AddRule(RuleModel rule)
@@ -110,12 +132,64 @@ namespace LuckyDraw.Services
             return ret;
         }
 
+        public async Task<int> EditRule(int id, RuleModel rule)
+        {
+            int ret = 0;
+            try
+            {
+
+                GiftModel gift = new GiftModel();
+                gift = await _context.GiftModels.Where(g => g.GiftId == rule.RuleGiftId).FirstOrDefaultAsync();
+
+                RuleModel _rule = null;
+                _rule = await GetRuleId(id);
+
+                _rule.RuleName = rule.RuleName;
+                _rule.RuleSelectGift = gift.GiftProductName;
+                _rule.RuleAmount = rule.RuleAmount;
+                _rule.RuleStartTime = rule.RuleStartTime;
+                _rule.RuleEndTime = rule.RuleEndTime;
+                _rule.RuleStartDay = rule.RuleStartDay;
+                _rule.RuleAllDay = rule.RuleAllDay;
+                _rule.RuleProbability = rule.RuleProbability;
+                _rule.RuleMonthly = rule.RuleMonthly; ;
+                _rule.RuleWeekly = rule.RuleWeekly;
+
+                _context.Update(_rule);
+                await _context.SaveChangesAsync();
+                return rule.RuleGiftId;
+            }
+            catch(Exception ex)
+            {
+                ret = 0;
+            }
+            return ret;
+        }
+
+        public async Task<int> DeleteRule(int id)
+        {
+            int ret = 0;
+            try
+            {
+                var rule = GetRuleIdFind(id);
+                _context.Remove(rule);
+                await _context.SaveChangesAsync();
+                ret = rule.RuleId;
+            }
+            catch (Exception ex)
+            {
+                ret = 0;
+            }
+            return ret;
+        }
+
         public async Task<List<GiftModel>> GetGiftAll()
         {
             List<GiftModel> list = new List<GiftModel>();
             list = await _context.GiftModels.ToListAsync();
             return list;
         }
+
         public GiftModel GetGiftIdFind(int id)
         {
             GiftModel giftModel = null;
@@ -134,6 +208,7 @@ namespace LuckyDraw.Services
             int ret = 0;
             try
             {
+
                 giftModel.IsDelete = true;
 
                 _context.Add(giftModel);
@@ -216,19 +291,46 @@ namespace LuckyDraw.Services
             return ret;
         }
 
+        public async Task<List<BarcodeHistory>> GetBarcodeHistory()
+        {
+            List<BarcodeHistory> list = new List<BarcodeHistory>();
+            list = await _context.BarcodeHistory.Include(o=>o.customerModel)
+                .Include(o=>o.barcodeModel).ToListAsync();
+            return list;
+        }
+
         public async Task<int> ScanBarcode(BarcodeHistory barcodeHistory)
         {
             int ret = 0;
             try
             {
+                BarcodeModel barcode = new BarcodeModel();
+                CustomerModel customer = new CustomerModel();
+
+                barcode = await _context.BarcodeModels.Where(g => g.BarcodeId == barcodeHistory.BarcodeId).FirstOrDefaultAsync();
+                customer = await _context.CustomerModels.Where(g => g.CustomerID == barcodeHistory.BarcodeCustomer).FirstOrDefaultAsync();
+
+                barcodeHistory.Code = barcode.Code;
+                barcodeHistory.BarcodeHistotyCreateDate = barcode.BarcodeCreateDate;
+                barcodeHistory.BarcodeHistotyScannedDate = DateTime.Now;
+
+                barcodeHistory.BarcodeHistoryOwner = customer.CustomerName;
+                barcodeHistory.BarcodeHistoryScanned = true;
+                barcodeHistory.BarcodeHistoryUsespin = true;
+
                 _context.Add(barcodeHistory);
                 await _context.SaveChangesAsync();
                 ret = barcodeHistory.BarcodeHistoryId;
-                //if(ret > 0)
-                //{
-                //    BarcodeModel barcode = new BarcodeModel();
-                //    barcode = await _context.BarcodeModels.Where(x => x.cam)
-                //}
+                if (ret > 0)
+                {
+                    
+                    barcode = await _context.BarcodeModels.Where(x => x.CampaignId == barcodeHistory.BarcodeId).FirstOrDefaultAsync();
+                    barcode.BarcodeScanned += 1;
+                    customer.CustomerSpin += 1;
+                    _context.Update(barcode);
+                    _context.Update(customer);
+                    await _context.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {

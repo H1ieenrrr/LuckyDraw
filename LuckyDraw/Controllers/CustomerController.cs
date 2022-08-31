@@ -60,8 +60,8 @@ namespace LuckyDraw.Controllers
         [ActionName("spin")]
         public async Task<ActionResult> Spin([FromBody] ViewSpin spin)
         {
-            bool amountSpin = await _customerSvc.Spin(spin);
             bool amountGift = await _customerSvc.CheckAmountGift(spin);
+            bool amountSpin = await _customerSvc.Spin(spin);
             bool addWin = await _customerSvc.AddWinner(spin);
 
             if (amountGift)

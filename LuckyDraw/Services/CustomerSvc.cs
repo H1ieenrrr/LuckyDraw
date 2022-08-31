@@ -86,7 +86,20 @@ namespace LuckyDraw.Services
         public async Task<bool> CheckAmountGift(ViewSpin spin)
         {
             GiftModel gift = new GiftModel();
-            gift = _context.GiftModels.Where(g => g.GiftId == spin.GiftId).FirstOrDefault();
+            Random random = new Random();
+            CampaignModel campaign = new CampaignModel();
+            List<GiftModel> giftList = new List<GiftModel>();
+
+            campaign = await _context.CampaignModels.Where(c => c.CampaignId == spin.CampaignId).FirstOrDefaultAsync();// truy xuất id campaign
+            
+            giftList = await _context.GiftModels.Where(g => g.GiftCampaign == campaign.CampaignId).ToListAsync();// đếm số lượng gift trong campaign
+       
+            int a = random.Next(giftList.Count); // random 
+
+            spin.Listgift =  giftList[a];
+            spin.GiftId =spin.Listgift.GiftId;
+
+            gift = await _context.GiftModels.Where(g => g.GiftId == spin.GiftId).FirstOrDefaultAsync();
 
             if (gift.GiftCount < 1)
             {
@@ -100,26 +113,32 @@ namespace LuckyDraw.Services
         }
 
 
+
         public async Task<bool> AddWinner(ViewSpin spin)
         {
             if (spin.GiftId > 0)
             {
                 Random random = new Random();
-                spin.Lucky = random.Next(1, 4);
+                spin.Lucky = random.Next(1, 2);
 
+               
                 GiftModel gift = new GiftModel();
                 gift = _context.GiftModels.Where(g => g.GiftId == spin.GiftId).FirstOrDefault();
-                gift.GiftCount -= 1;
-                gift.GiftUsed += 1;
+                if (spin.Lucky == 1)
+                {
+                    gift.GiftCount -= 1;
+                    gift.GiftUsed += 1;
+                }   
                 _context.Update(gift);
                 await _context.SaveChangesAsync();
+
                 WinnerModel winner = new WinnerModel();
                 winner.WinnerCustommerId = spin.CustomerId;
                 winner.WinnerName = gift.CustomerModel.CustomerName;
                 winner.WinnerAddress = gift.CustomerModel.CustomerAddress;
                 winner.WinnerPhone = gift.CustomerModel.CustomerPhone;
                 winner.WinnerGift = spin.GiftId;
-                if(spin.Lucky == 1)
+                if (spin.Lucky == 1)
                 {
                     winner.WinnerProduct = gift.GiftProductName;
                 }
@@ -138,13 +157,13 @@ namespace LuckyDraw.Services
             {
                 return false;
             }
-            
+
         }
 
         public async Task<bool> Spin(ViewSpin spin)
         {
             CustomerModel customer = new CustomerModel();
-            customer = _context.CustomerModels.Where(c => c.CustomerID == spin.CustomerId).FirstOrDefault();
+            customer = await _context.CustomerModels.Where(g => g.CustomerID == spin.CustomerId).FirstOrDefaultAsync();
             if (customer.CustomerSpin < 1)
             {
                 return false;

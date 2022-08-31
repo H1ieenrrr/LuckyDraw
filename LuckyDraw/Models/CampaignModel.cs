@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -61,12 +62,10 @@ namespace LuckyDraw.Models
         [StringLength(100)]
         public string CampaignNote { get; set; }
 
+
+        public  ICollection<GiftModel> giftModel { get; set; }
         
-
-
-        public virtual GiftModel giftModel { get; set; }
-        
-
+        public ICollection<BarcodeModel> barcodeModels { get; set; }
 
     }
 }

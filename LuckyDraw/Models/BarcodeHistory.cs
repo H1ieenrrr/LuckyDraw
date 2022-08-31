@@ -10,6 +10,11 @@ namespace LuckyDraw.Models
         [Key]
         public int BarcodeHistoryId { get; set; }
 
+        [ForeignKey("customerModel")]
+        public int BarcodeCustomer { get; set; }
+
+        [ForeignKey("barcodeModel")]
+        public int BarcodeId { get; set; }
         public string Code { get; set; }
 
         [DataType(DataType.DateTime)]
@@ -27,8 +32,8 @@ namespace LuckyDraw.Models
 
         public bool BarcodeHistoryUsespin { get; set; }
 
-        [ForeignKey("barcodeModel")]
-        public int Barcodeid { get; set; }
         public BarcodeModel barcodeModel { get; set; }
+
+        public CustomerModel customerModel { get; set; }
     }
 }

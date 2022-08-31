@@ -45,6 +45,6 @@ namespace LuckyDraw.Models
         
         public CustomerModel CustomerModel { get; set; }
         public virtual  RuleModel ruleModel { get; set; }
-        public virtual CampaignModel campaignModel { get; set; }
+        public CampaignModel campaignModel { get; set; }
     }
 }

@@ -42,6 +42,14 @@ namespace LuckyDraw.Controllers
         }
 
         [HttpGet]
+        [ActionName("listCustomer")]
+        public async Task<ActionResult<IEnumerable<CustomerModel>>> GetCustomer()
+        {
+            var list = await _adminSvc.GetCustomerAll();
+            return list;
+        }
+
+        [HttpGet]
         [ActionName("campaign")]
         public async Task<ActionResult<IEnumerable<CampaignModel>>> GetCampaign()
         {
@@ -55,6 +63,7 @@ namespace LuckyDraw.Controllers
         {
             try
             {
+
                 int id = await _adminSvc.AddCampaign(campaign);
                 campaign.CampaignId = id;
             }
@@ -86,6 +95,48 @@ namespace LuckyDraw.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            return Ok(1);
+        }
+
+        [HttpPut("{id}")]
+        [ActionName("rule")]
+        public async Task<ActionResult> UpdateRule(int id, RuleModel rule)
+        {
+            if (id != rule.RuleId)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                await _adminSvc.EditRule(id, rule);
+                rule.RuleId = id;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(-1);
+            }
+            return Ok(1);
+        }
+
+        [HttpDelete("{id}")]
+        [ActionName("rule")]
+        public async Task<ActionResult<int>> DeleteRule(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await _adminSvc.DeleteRule(id);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(-1);
+            }
+
             return Ok(1);
         }
 
@@ -175,6 +226,31 @@ namespace LuckyDraw.Controllers
                 barcode.BarcodeId = id;
             }
             catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(1);
+        }
+
+
+        [HttpGet]
+        [ActionName("barcodehistory")]
+        public async Task<ActionResult<IEnumerable<BarcodeHistory>>> GetBarcodeHistory()
+        {
+            var list = await _adminSvc.GetBarcodeHistory();
+            return list;
+        }
+
+        [HttpPost]
+        [ActionName("scanbarcode")]
+        public async Task<ActionResult<int>> ScanBarcode(BarcodeHistory barcodeHistory)
+        {
+            try
+            {
+                int id = await _adminSvc.ScanBarcode(barcodeHistory);
+                barcodeHistory.BarcodeHistoryId = id;
+            }
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }

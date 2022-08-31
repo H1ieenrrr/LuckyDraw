@@ -48,7 +48,7 @@ namespace LuckyDraw.Models
 
         [ForeignKey("Campaign")]
         public int CampaignId { get; set; }
-        public bool BarcodeScanned { get; set; }
+        public int BarcodeScanned { get; set; }
 
         public bool BarcodeActive { get; set; }
 
